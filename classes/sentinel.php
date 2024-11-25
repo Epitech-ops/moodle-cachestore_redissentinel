@@ -29,7 +29,7 @@ defined('MOODLE_INTERNAL') || die();
 class sentinel {
 
     private $sentinels = array();
-    
+
     public $connecttimeout = 1;
     public $readtimeout = 1;
     public $persistent = true;
@@ -47,7 +47,7 @@ class sentinel {
         $this->sentinels = $sentinels;
 
         $this->flags = STREAM_CLIENT_CONNECT;
-        
+
         $this->connected = false;
 
     }
@@ -62,7 +62,9 @@ class sentinel {
         if ($this->connected) {
             return true;
         }
-        
+
+        $this->sentinels = explode(",", $this->sentinels);
+
         foreach ($this->sentinels as $sentinel) {
             if ($this->connect($sentinel)) {
                 return true;
@@ -89,7 +91,7 @@ class sentinel {
         $this->connected = true;
 
         stream_set_blocking($this->socket, true);
-        stream_set_timeout($this->socket, $this->readtimeout); 
+        stream_set_timeout($this->socket, $this->readtimeout);
 
         // Test sentinel is alive
         if ($this->pingonconnect) {
@@ -100,10 +102,10 @@ class sentinel {
                 return false;
             }
         }
-        return true; 
+        return true;
     }
 
-    
+
 
     public function disconnect() {
         fclose($this->socket);
@@ -138,7 +140,7 @@ class sentinel {
         }
         $cmd = "SENTINEL $command\n";
 
-        
+
 
         $cmdlen = strlen($cmd);
         $lastwrite = 0;
@@ -151,7 +153,7 @@ class sentinel {
             }
         }
     }
-    
+
 
     private function readreply() {
         if (!$this->connected) {

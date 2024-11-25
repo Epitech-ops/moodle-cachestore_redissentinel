@@ -56,13 +56,13 @@ class redissentinel extends \core\session\redis {
     /**
      * Init function.
      */
-    public function init () {
+    public function init () : bool {
         $sentinel = new \cachestore_redissentinel\sentinel($this->hosts);
         $master = $sentinel->get_master_addr($this->master_group);
         if (!empty($master)) {
-            $this->host = $master->ip;
+            $this->host = array($master->ip);
             $this->port = $master->port;
         }
-        parent::init();
+        return parent::init();
     }
 }

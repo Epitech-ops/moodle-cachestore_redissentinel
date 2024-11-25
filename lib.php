@@ -132,9 +132,8 @@ class cachestore_redissentinel extends cache_store implements cache_is_key_aware
             return;
         }
 
-        $servers = explode(',',$configuration['server']);
         try {
-            $sentinel = new \cachestore_redissentinel\sentinel($servers);
+            $sentinel = new \cachestore_redissentinel\sentinel($configuration['server']);
 
             $master = $sentinel->get_master_addr($configuration['master_group']);
             $server = $master->ip.':'.$master->port;
