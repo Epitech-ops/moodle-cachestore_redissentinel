@@ -305,8 +305,7 @@ class cachestore_redissentinel extends cache_store implements cache_is_key_aware
      */
     public function delete_many(array $keys) {
         // Redis needs the hash as the first argument, so we have to put it at the start of the array.
-        array_unshift($keys, $this->hash);
-        return call_user_func_array(array($this->redis, 'hDel'), $keys);
+        return $this->redis->hDel($this->hash, $keys);
     }
 
     /**
