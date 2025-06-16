@@ -255,7 +255,7 @@ class cachestore_redissentinel extends cache_store implements cache_is_key_aware
      * @return array An array of the values of the given keys.
      */
     public function get_many($keys) {
-        return $this->redis->hMGet($this->hash, $keys);
+        return $this->redis->hMGet($this->hash, $keys) ?: [];
     }
 
     /**
